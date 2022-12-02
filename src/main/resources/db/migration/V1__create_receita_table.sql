@@ -1,0 +1,7 @@
+CREATE TABLE receitas(
+	id UUID NOT NULL,
+	descricao VARCHAR NOT NULL,
+	valor DECIMAL NOT NULL,
+	data DATE NOT NULL,
+	PRIMARY KEY(id)
+);
