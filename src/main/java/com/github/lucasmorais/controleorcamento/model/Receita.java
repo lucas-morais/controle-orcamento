@@ -3,7 +3,7 @@ package com.github.lucasmorais.controleorcamento.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import com.github.lucasmorais.controleorcamento.dto.receita.CriarReceitaDTO;
+import com.github.lucasmorais.controleorcamento.dto.receita.CriaReceitaDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,7 +33,7 @@ public class Receita {
   private LocalDate data = LocalDate.now();
 
 
-  public Receita(CriarReceitaDTO receita) {
+  public Receita(CriaReceitaDTO receita) {
     this.descricao = receita.descricao();
     this.valor = receita.valor();
     this.data = receita.data();

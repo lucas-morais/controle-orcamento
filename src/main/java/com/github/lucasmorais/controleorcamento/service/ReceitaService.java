@@ -2,8 +2,8 @@ package com.github.lucasmorais.controleorcamento.service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import com.github.lucasmorais.controleorcamento.dto.receita.CriarReceitaDTO;
-import com.github.lucasmorais.controleorcamento.dto.receita.ListarReceitaDTO;
+import com.github.lucasmorais.controleorcamento.dto.receita.CriaReceitaDTO;
+import com.github.lucasmorais.controleorcamento.dto.receita.ListaReceitaDTO;
 import com.github.lucasmorais.controleorcamento.model.Receita;
 import com.github.lucasmorais.controleorcamento.repository.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class ReceitaService {
   @Autowired
   private ReceitaRepository repository;
 
-  public ListarReceitaDTO criar(CriarReceitaDTO receita) {
+  public ListaReceitaDTO criar(CriaReceitaDTO receita) {
 
     YearMonth mes = YearMonth.from(receita.data());
 
@@ -31,7 +31,7 @@ public class ReceitaService {
 
     Receita saved = this.repository.save(new Receita(receita));
 
-    return new ListarReceitaDTO(saved);
+    return new ListaReceitaDTO(saved);
 
   }
 }
