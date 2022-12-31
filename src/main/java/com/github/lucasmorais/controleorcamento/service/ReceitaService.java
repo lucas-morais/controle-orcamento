@@ -1,5 +1,7 @@
 package com.github.lucasmorais.controleorcamento.service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import com.github.lucasmorais.controleorcamento.dto.receita.CriarReceitaDTO;
 import com.github.lucasmorais.controleorcamento.dto.receita.ListarReceitaDTO;
 import com.github.lucasmorais.controleorcamento.model.Receita;
@@ -14,7 +16,22 @@ public class ReceitaService {
   private ReceitaRepository repository;
 
   public ListarReceitaDTO criar(CriarReceitaDTO receita) {
-    Receita receitaCriada = repository.save(new Receita(receita));
-    return new ListarReceitaDTO(receitaCriada);
+
+    YearMonth mes = YearMonth.from(receita.data());
+
+    LocalDate inicio = mes.atDay(1);
+    LocalDate fim = mes.atEndOfMonth();
+
+    Receita receitaExiste =
+        this.repository.findByDescricaoAndDataBetween(receita.descricao(), inicio, fim);
+
+    if (receitaExiste != null) {
+      System.out.println("Já existe");
+    }
+
+    Receita saved = this.repository.save(new Receita(receita));
+
+    return new ListarReceitaDTO(saved);
+
   }
 }
