@@ -2,6 +2,7 @@ package com.github.lucasmorais.controleorcamento.service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 import com.github.lucasmorais.controleorcamento.dto.receita.CriaReceitaDTO;
 import com.github.lucasmorais.controleorcamento.dto.receita.ListaReceitaDTO;
 import com.github.lucasmorais.controleorcamento.model.Receita;
@@ -33,5 +34,10 @@ public class ReceitaService {
 
     return new ListaReceitaDTO(saved);
 
+  }
+
+  public List<ListaReceitaDTO> listar() {
+    List<Receita> receitas = this.repository.findAll();
+    return receitas.stream().map(ListaReceitaDTO::new).toList();
   }
 }
