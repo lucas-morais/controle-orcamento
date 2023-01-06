@@ -48,4 +48,9 @@ public class ReceitaService {
     return new ListaReceitaDTO(receita);
   }
 
+  public void deletar(UUID id) {
+    this.repository.deleteById(id);
+
+  }
+
 }
