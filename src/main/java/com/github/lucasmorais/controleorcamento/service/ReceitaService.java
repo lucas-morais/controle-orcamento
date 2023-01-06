@@ -3,6 +3,7 @@ package com.github.lucasmorais.controleorcamento.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.UUID;
 import com.github.lucasmorais.controleorcamento.Exception.RegistroJaExisteExeception;
 import com.github.lucasmorais.controleorcamento.dto.receita.CriaReceitaDTO;
 import com.github.lucasmorais.controleorcamento.dto.receita.ListaReceitaDTO;
@@ -42,5 +43,9 @@ public class ReceitaService {
     return receitas.stream().map(ListaReceitaDTO::new).toList();
   }
 
+  public ListaReceitaDTO detalhar(UUID id) {
+    Receita receita = repository.getReferenceById(id);
+    return new ListaReceitaDTO(receita);
+  }
 
 }
