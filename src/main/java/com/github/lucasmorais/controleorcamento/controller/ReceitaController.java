@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/receitas")
@@ -24,7 +25,7 @@ public class ReceitaController {
   private ReceitaService service;
 
   @PostMapping
-  public ResponseEntity<ListaReceitaDTO> criarReceita(@RequestBody CriaReceitaDTO receita) {
+  public ResponseEntity<ListaReceitaDTO> criarReceita(@RequestBody @Valid CriaReceitaDTO receita) {
     ListaReceitaDTO receitaDTO = service.criar(receita);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(receitaDTO.id()).toUri();
