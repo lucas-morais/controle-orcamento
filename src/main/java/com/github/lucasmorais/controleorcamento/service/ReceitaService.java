@@ -3,6 +3,7 @@ package com.github.lucasmorais.controleorcamento.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import com.github.lucasmorais.controleorcamento.Exception.RegistroJaExisteExeception;
 import com.github.lucasmorais.controleorcamento.dto.receita.CriaReceitaDTO;
 import com.github.lucasmorais.controleorcamento.dto.receita.ListaReceitaDTO;
 import com.github.lucasmorais.controleorcamento.model.Receita;
@@ -27,7 +28,7 @@ public class ReceitaService {
         this.repository.findByDescricaoAndDataBetween(receita.descricao(), inicio, fim);
 
     if (receitaExiste != null) {
-      System.out.println("Já existe");
+      throw new RegistroJaExisteExeception("receita já cadastrada no mês atual");
     }
 
     Receita saved = this.repository.save(new Receita(receita));
@@ -40,4 +41,6 @@ public class ReceitaService {
     List<Receita> receitas = this.repository.findAll();
     return receitas.stream().map(ListaReceitaDTO::new).toList();
   }
+
+
 }
