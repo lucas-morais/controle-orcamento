@@ -6,8 +6,9 @@ import jakarta.persistence.GenerationType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
+
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
@@ -30,6 +31,12 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_transacao")
 public class Transacao {
+
+    public Transacao(CriaTransacaoDTO criaTransacaoDto) {
+        this.valor = criaTransacaoDto.valor();
+        this.descricao = criaTransacaoDto.descricao();
+        this.data = criaTransacaoDto.data();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
