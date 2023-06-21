@@ -3,6 +3,8 @@ package com.github.lucasmorais.serenity.builder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
+import com.github.lucasmorais.serenity.dto.TransacaoDTO;
 import com.github.lucasmorais.serenity.model.Despesa;
 import com.github.lucasmorais.serenity.model.Receita;
 import com.github.lucasmorais.serenity.model.Transacao;
@@ -44,5 +46,13 @@ public class TransacaoBuilder {
 
     public Despesa buildDespesa() {
         return new Despesa(id, valor, descricao, data);
+    }
+
+    public CriaTransacaoDTO buildCriaTransacaoDto() {
+        return new CriaTransacaoDTO(valor, descricao, data);
+    }
+
+    public TransacaoDTO buildTransacaoDTO() {
+        return new TransacaoDTO(id, valor, descricao, data);
     }
 }
