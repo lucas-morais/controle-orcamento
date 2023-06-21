@@ -7,7 +7,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("S")
+@DiscriminatorValue("D")
 public class Despesa extends Transacao {
 
     public Despesa(Long id, BigDecimal valor, String descricao, LocalDate data) {
