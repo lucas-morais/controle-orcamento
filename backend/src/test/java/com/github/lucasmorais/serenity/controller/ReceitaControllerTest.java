@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.github.lucasmorais.serenity.controller.ReceitaControler;
 import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
 import com.github.lucasmorais.serenity.dto.TransacaoDTO;
 import com.github.lucasmorais.serenity.service.TransacaoService;
