@@ -1,8 +1,10 @@
 package com.github.lucasmorais.serenity.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
 import com.github.lucasmorais.serenity.dto.TransacaoDTO;
+import com.github.lucasmorais.serenity.exception.TransacaoJaExisteException;
 import com.github.lucasmorais.serenity.model.Receita;
 import com.github.lucasmorais.serenity.model.TipoTransacao;
 import com.github.lucasmorais.serenity.model.Transacao;
@@ -63,18 +66,17 @@ public class TransacaoServiceTest {
     @DisplayName("Deve lançar exceção, criar uma receita e retornar o DTO da receita criada")
     void lancaExcecaoAOTentarCriarReceitaJaDefinida() {
         CriaTransacaoDTO criaReceitaDto = new CriaTransacaoDTO(new BigDecimal("10.0"), "Nova receita", dataPadrao);
-        Receita receitaCriada = new Receita(1L, new BigDecimal("10.00"), "Nova Receita", dataPadrao);
         TipoTransacao tipoTransacao = TipoTransacao.RECEITA;
         
-        when(repository.save(any(Receita.class))).thenReturn(receitaCriada);
+        doThrow(TransacaoJaExisteException.class)
+            .when(validation).existsTransacaoDefinida(any(CriaTransacaoDTO.class), any(TipoTransacao.class));
+            
 
-        TransacaoDTO receitaDto = service.criaTransacao(criaReceitaDto, tipoTransacao);
-
-        assertThat(receitaDto).isExactlyInstanceOf(TransacaoDTO.class);
-        assertThat(receitaDto.id()).isEqualTo(receitaCriada.getId());
-        assertThat(receitaDto.valor()).isEqualTo(receitaCriada.getValor());
-        assertThat(receitaDto.descricao()).isEqualTo(receitaCriada.getDescricao());
-        assertThat(receitaDto.data()).isEqualTo(receitaCriada.getData());
+        
+        assertThatThrownBy(() -> this.service.criaTransacao(criaReceitaDto, tipoTransacao))
+            .isInstanceOf(TransacaoJaExisteException.class);
+        
+        verify(this.repository, never()).save(any(Transacao.class));
 
     }
 
