@@ -44,7 +44,7 @@ public class TransacaoValidationTest {
                 anyString(), anyInt(), any())).thenReturn(true);
         assertThatThrownBy(() -> this.validation.existsTransacaoDefinida(receita, TipoTransacao.RECEITA))
             .isInstanceOf(TransacaoJaExisteException.class)
-            .hasMessageContaining( tipoTransacao.getNome() + " já existe");
+            .hasMessageContaining( tipoTransacao.getNome() + " ja existe");
         
     }
 

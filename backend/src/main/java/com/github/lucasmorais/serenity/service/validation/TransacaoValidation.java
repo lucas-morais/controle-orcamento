@@ -19,7 +19,7 @@ public class TransacaoValidation {
         int mes = criaTransacaoDTO.data().getMonthValue();
         if(this.repository.existsByDescricaoAndDataMonthAndTipoTransacao(
             criaTransacaoDTO.descricao(), mes, tipoTransacao.classe)) {
-            throw new TransacaoJaExisteException(tipoTransacao.getNome() + " já existe");
+            throw new TransacaoJaExisteException(tipoTransacao.getNome() + " ja existe");
         }
     }
 }
