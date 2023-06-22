@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
@@ -28,7 +27,10 @@ public class ReceitaControler {
     @PostMapping
     public ResponseEntity<TransacaoDTO> craiReceita(@RequestBody CriaTransacaoDTO criaTransacaoDTO) {
         TransacaoDTO receitaCriada = this.service.criaTransacao(criaTransacaoDTO, tipoTransacao);
-        URI uri = UriComponentsBuilder.fromPath("/receitas/{id}").buildAndExpand(receitaCriada.id()).toUri();
+        URI uri = UriComponentsBuilder
+            .fromPath("/receitas/{id}")
+            .buildAndExpand(receitaCriada.id())
+            .toUri();
         return ResponseEntity.created(uri).body(receitaCriada);
     }
 }

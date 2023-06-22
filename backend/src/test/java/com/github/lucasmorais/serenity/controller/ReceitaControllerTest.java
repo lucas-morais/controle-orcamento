@@ -1,6 +1,7 @@
 package com.github.lucasmorais.serenity.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -21,7 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.github.lucasmorais.serenity.builder.TransacaoBuilder;
 import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
+import com.github.lucasmorais.serenity.dto.ErroDTO;
 import com.github.lucasmorais.serenity.dto.TransacaoDTO;
+import com.github.lucasmorais.serenity.exception.TransacaoJaExisteException;
 import com.github.lucasmorais.serenity.model.TipoTransacao;
 import com.github.lucasmorais.serenity.service.TransacaoService;
 
@@ -38,6 +41,9 @@ public class ReceitaControllerTest {
 
     @Autowired
     private JacksonTester<TransacaoDTO> receitaJson;
+
+    @Autowired
+    private JacksonTester<ErroDTO> erroJson; 
 
     @MockBean
     private TransacaoService service;
@@ -67,5 +73,27 @@ public class ReceitaControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.getHeader("Location")).isEqualTo("/receitas/" + 10);
         assertThat(response.getContentAsString()).isEqualTo(josnEsperado);
+    }
+
+    @Test
+    @DisplayName("Deve retornar status 409 e mensagem de erro ao tentar criar receita já existente")
+    void deveRetornarMensagemDeErroAoTeentarCriarReceitaJaDefinida() throws IOException, Exception {
+        var criaReceitaDto = new TransacaoBuilder().data(dataPadrao).buildCriaTransacaoDto();
+
+        when(this.service.criaTransacao(any(CriaTransacaoDTO.class), any(TipoTransacao.class)))
+            .thenThrow(new TransacaoJaExisteException("Receita ja existe"));
+
+        var response = mockMvc.perform(
+            post("/receitas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(criaReceitaJson.write(criaReceitaDto).getJson())
+            ).andReturn().getResponse();
+
+        var jsonEsperado = erroJson
+            .write(new ErroDTO(HttpStatus.CONFLICT.value(), "Receita ja existe"))
+            .getJson();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CONFLICT.value());
+        assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
     }
 }
