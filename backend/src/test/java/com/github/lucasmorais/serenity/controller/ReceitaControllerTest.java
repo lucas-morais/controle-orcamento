@@ -50,8 +50,9 @@ public class ReceitaControllerTest {
     @Test
     @DisplayName("Cria receita com sucesso, retornando objeto JSON e Status Code 201")
     void deveCriarReceita() throws IOException, Exception {
+        Long id = 10L;
         var criaReceitaDto = new TransacaoBuilder().data(dataPadrao).buildCriaTransacaoDto();
-        var receitaCriada = new TransacaoBuilder().id(1L).data(dataPadrao).buildTransacaoDTO();
+        var receitaCriada = new TransacaoBuilder().id(id).data(dataPadrao).buildTransacaoDTO();
 
         when(this.service.criaTransacao(criaReceitaDto, tipoTransacao)).thenReturn(receitaCriada);
 
@@ -64,6 +65,7 @@ public class ReceitaControllerTest {
         var josnEsperado = receitaJson.write(receitaCriada).getJson();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.getHeader("Location")).isEqualTo("/receitas/" + 10);
         assertThat(response.getContentAsString()).isEqualTo(josnEsperado);
     }
 }
