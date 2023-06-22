@@ -13,7 +13,7 @@ public class TransacaoBuilder {
 
     private Long id = null;
     private BigDecimal valor = new BigDecimal("100.00");
-    private String descricao = "Nova Transação";
+    private String descricao = "Nova Transacao";
     private LocalDate data = LocalDate.now();
 
     public TransacaoBuilder id(Long id) {
