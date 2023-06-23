@@ -77,11 +77,11 @@ public class TransacaoRepositoryTest {
     void listaTransacoesPorTipo() {
         ciraListaDeReceitas();
 
-        List<Receita> receitas = this.repository.findAllByTipoTransacao(Receita.class);
+        List<Transacao> receitas = this.repository.findAllByTipoTransacao(Receita.class);
         assertThat(receitas).hasSize(3);
         assertThat(receitas).allMatch(receita -> receita.getClass() == Receita.class);
     }
-    
+
     private void ciraListaDeReceitas() {
         IntStream.range(1,4).forEach( i -> {
             Receita receitaCriada = new TransacaoBuilder()
