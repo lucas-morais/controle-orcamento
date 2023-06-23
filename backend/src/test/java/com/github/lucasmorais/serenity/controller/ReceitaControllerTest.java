@@ -4,9 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,8 +46,12 @@ public class ReceitaControllerTest {
     @Autowired
     private JacksonTester<TransacaoDTO> receitaJson;
 
+
     @Autowired
-    private JacksonTester<ErroDTO> erroJson; 
+    private JacksonTester<ErroDTO> erroJson;
+    
+    @Autowired 
+    private JacksonTester<List<TransacaoDTO>> listaDeReceitasJson;
 
     @MockBean
     private TransacaoService service;
@@ -96,4 +104,32 @@ public class ReceitaControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CONFLICT.value());
         assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
     }
+
+    @Test
+    @DisplayName("deve retornar status 200 e uma lista de receitas")
+    void listaReceitas() throws Exception {
+        List<TransacaoDTO> listaDeReceitas = ciraListaDeReceitas();
+
+        when(this.service.listaTransacoesPorTipo(any(TipoTransacao.class))).thenReturn(listaDeReceitas);
+
+        var jsonEsperado = listaDeReceitasJson.write(listaDeReceitas).getJson();
+
+        var response = mockMvc
+            .perform(get("/receitas"))
+            .andReturn()
+            .getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
+
+
+    }
+
+    private List<TransacaoDTO> ciraListaDeReceitas() {
+        return IntStream.range(1,4).mapToObj( i -> new TransacaoBuilder()
+                .id(Long.valueOf(i))
+                .descricao("Receita " + i)
+                .buildTransacaoDTO()).toList();
+    }
+    
 }

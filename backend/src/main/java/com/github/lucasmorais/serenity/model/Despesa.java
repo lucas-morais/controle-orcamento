@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 public class Despesa extends Transacao {
 
     public Despesa(Long id, BigDecimal valor, String descricao, LocalDate data) {
+        super(id, valor, descricao, data);
     }
     
 }

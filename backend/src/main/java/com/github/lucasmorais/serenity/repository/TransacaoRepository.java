@@ -1,7 +1,10 @@
 package com.github.lucasmorais.serenity.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.github.lucasmorais.serenity.model.Transacao;
@@ -15,5 +18,10 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
         """)
     boolean existsByDescricaoAndDataMonthAndTipoTransacao(String descricao, 
     int mes, Class<? extends Transacao> tipoTransacao);
+
+    @Query(
+        "SELECT t FROM Transacao t WHERE TYPE(t) = :tipoTransacao"
+    )
+    List<Transacao> findAllByTipoTransacao( @Param("tipoTransacao") Class<? extends Transacao> tipoTransacao);
 
 }

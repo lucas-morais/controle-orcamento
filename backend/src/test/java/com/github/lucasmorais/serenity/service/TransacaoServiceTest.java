@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.github.lucasmorais.serenity.builder.TransacaoBuilder;
 import com.github.lucasmorais.serenity.dto.CriaTransacaoDTO;
 import com.github.lucasmorais.serenity.dto.TransacaoDTO;
 import com.github.lucasmorais.serenity.exception.TransacaoJaExisteException;
@@ -80,5 +83,23 @@ public class TransacaoServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Deve listar apenas transações do tipo especificado")
+    void listaTransacoesPorTipo() {
+        List<Transacao> receitas = ciraListaDeReceitas();
+
+        when(this.repository.findAllByTipoTransacao(any())).thenReturn(receitas);
+        var listaTransacoes = this.service.listaTransacoesPorTipo(TipoTransacao.RECEITA);
+        
+        assertThat(listaTransacoes).hasSize(3);
+        assertThat(listaTransacoes).allMatch(transacao -> transacao.getClass() == TransacaoDTO.class);
+    }
+    
+    private List<Transacao> ciraListaDeReceitas() {
+        return IntStream.range(1,4).mapToObj( i -> new TransacaoBuilder()
+                .id(Long.valueOf(i))
+                .descricao("Receita " + i)
+                .buildTransacao()).toList();
+    }
     
 }

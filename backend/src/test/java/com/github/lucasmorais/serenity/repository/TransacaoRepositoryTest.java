@@ -3,6 +3,8 @@ package com.github.lucasmorais.serenity.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.github.lucasmorais.serenity.builder.TransacaoBuilder;
 import com.github.lucasmorais.serenity.model.Despesa;
 import com.github.lucasmorais.serenity.model.Receita;
 import com.github.lucasmorais.serenity.model.Transacao;
+
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -24,6 +28,9 @@ public class TransacaoRepositoryTest {
 
     @Autowired
     private TransacaoRepository repository;
+
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     @DisplayName("Testa se receita é criada com sucesso")
@@ -63,4 +70,31 @@ public class TransacaoRepositoryTest {
         assertThat(despesaNaoExiste).isFalse();
     
     }
+
+
+    @Test
+    @DisplayName("Deve retornar todas as as transações do tipo desejado")
+    void listaTransacoesPorTipo() {
+        ciraListaDeReceitas();
+
+        List<Transacao> receitas = this.repository.findAllByTipoTransacao(Receita.class);
+        assertThat(receitas).hasSize(3);
+        assertThat(receitas).allMatch(receita -> receita.getClass() == Receita.class);
+    }
+
+    private void ciraListaDeReceitas() {
+        IntStream.range(1,4).forEach( i -> {
+            Receita receitaCriada = new TransacaoBuilder()
+                .id(null)
+                .descricao("Receita " + i)
+                .buildReceita();
+            em.persist(receitaCriada);
+
+            Despesa despesaCriada = new TransacaoBuilder()
+                .id(null)
+                .descricao("Despesa " + i)
+                .buildDespesa();
+            em.persist(despesaCriada);
+        });
+    } 
 }

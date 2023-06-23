@@ -1,5 +1,7 @@
 package com.github.lucasmorais.serenity.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +27,14 @@ public class TransacaoService {
         Receita receita = new Receita(criaTransacaoDTO);
         Transacao transacao = this.repository.save(receita);
         return new TransacaoDTO(transacao);
+    }
+
+    public List<TransacaoDTO> listaTransacoesPorTipo(TipoTransacao tipoTransacao) {
+        List<Transacao> listaDeTransacoes = this.repository
+            .findAllByTipoTransacao(tipoTransacao.classe);
+        return listaDeTransacoes
+            .stream()
+            .map(transacao -> new TransacaoDTO(transacao))
+            .toList();
     }
 }
