@@ -89,7 +89,7 @@ public class TransacaoServiceTest {
         List<Transacao> receitas = ciraListaDeReceitas();
 
         when(this.repository.findAllByTipoTransacao(any())).thenReturn(receitas);
-        var listaTransacoes = this.service.listaPorTransacoesTipo(TipoTransacao.RECEITA);
+        var listaTransacoes = this.service.listaTransacoesPorTipo(TipoTransacao.RECEITA);
         
         assertThat(listaTransacoes).hasSize(3);
         assertThat(listaTransacoes).allMatch(transacao -> transacao.getClass() == TransacaoDTO.class);

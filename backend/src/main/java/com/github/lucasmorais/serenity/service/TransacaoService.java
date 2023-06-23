@@ -29,7 +29,7 @@ public class TransacaoService {
         return new TransacaoDTO(transacao);
     }
 
-    public List<TransacaoDTO> listaPorTransacoesTipo(TipoTransacao tipoTransacao) {
+    public List<TransacaoDTO> listaTransacoesPorTipo(TipoTransacao tipoTransacao) {
         List<Transacao> listaDeTransacoes = this.repository
             .findAllByTipoTransacao(tipoTransacao.classe);
         return listaDeTransacoes
