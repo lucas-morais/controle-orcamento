@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +41,11 @@ public class ReceitaControler {
     public ResponseEntity<List<TransacaoDTO>> listaReceitas() {
         List<TransacaoDTO> receitas = this.service.listaTransacoesPorTipo(tipoTransacao);
         return ResponseEntity.ok(receitas);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TransacaoDTO> detalhaReceita(@PathVariable("id") Long id) {
+        TransacaoDTO transacaoDTO = this.service.detalhaTransacao(id);
+        return ResponseEntity.ok(transacaoDTO);
     }
 }

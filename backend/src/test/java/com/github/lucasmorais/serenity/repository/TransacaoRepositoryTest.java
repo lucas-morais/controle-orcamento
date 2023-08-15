@@ -82,6 +82,25 @@ public class TransacaoRepositoryTest {
         assertThat(receitas).allMatch(receita -> receita.getClass() == Receita.class);
     }
 
+
+
+    @Test
+    @DisplayName("Deve retornar a transacao buscada pelo id, se ela existir")
+    void detalhaTransacaoSeExite() {
+        Receita receita = new TransacaoBuilder()
+            .descricao("Receita detalhada")
+            .buildReceita();
+        Receita receitaCriada = this.repository.save(receita);
+
+        Transacao receitaDetalhada = this.repository.getReferenceById(receitaCriada.getId());    
+    
+        assertThat(receitaDetalhada.getValor()).isEqualTo(receitaCriada.getValor());
+        assertThat(receitaDetalhada.getDescricao()).isEqualTo(receitaCriada.getDescricao());
+        assertThat(receitaDetalhada.getData()).isEqualTo(receitaCriada.getData());
+    }
+
+
+
     private void ciraListaDeReceitas() {
         IntStream.range(1,4).forEach( i -> {
             Receita receitaCriada = new TransacaoBuilder()
@@ -96,5 +115,5 @@ public class TransacaoRepositoryTest {
                 .buildDespesa();
             em.persist(despesaCriada);
         });
-    } 
+    }
 }

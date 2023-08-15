@@ -95,11 +95,30 @@ public class TransacaoServiceTest {
         assertThat(listaTransacoes).allMatch(transacao -> transacao.getClass() == TransacaoDTO.class);
     }
     
+    @Test
+    @DisplayName("Deve retornar uma transacão detalhada, se existir transação com id cadastrada")
+    void detalhaTransacao() {
+        Long receitaId = 1L;
+        Transacao transacao = new TransacaoBuilder().id(receitaId).buildTransacao();
+
+        when(this.repository.getReferenceById(receitaId)).thenReturn(transacao);
+
+        TransacaoDTO transacaoDto = this.service.detalhaTransacao(receitaId);
+
+        assertThat(transacaoDto.valor()).isEqualTo(transacao.getValor());
+        assertThat(transacaoDto.descricao()).isEqualTo(transacao.getDescricao());
+        assertThat(transacaoDto.data()).isEqualTo(transacao.getData());
+
+    
+    }
+    
+    
     private List<Transacao> ciraListaDeReceitas() {
         return IntStream.range(1,4).mapToObj( i -> new TransacaoBuilder()
                 .id(Long.valueOf(i))
                 .descricao("Receita " + i)
                 .buildTransacao()).toList();
     }
+
     
 }
