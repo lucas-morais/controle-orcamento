@@ -37,4 +37,9 @@ public class TransacaoService {
             .map(transacao -> new TransacaoDTO(transacao))
             .toList();
     }
+
+    public TransacaoDTO detalhaTransacao(Long id) {
+        Transacao transacao = this.repository.getReferenceById(id);
+        return new TransacaoDTO(transacao);
+    }
 }
