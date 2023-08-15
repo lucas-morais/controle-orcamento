@@ -2,6 +2,7 @@ package com.github.lucasmorais.serenity.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,6 +32,8 @@ import com.github.lucasmorais.serenity.dto.TransacaoDTO;
 import com.github.lucasmorais.serenity.exception.TransacaoJaExisteException;
 import com.github.lucasmorais.serenity.model.TipoTransacao;
 import com.github.lucasmorais.serenity.service.TransacaoService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @WebMvcTest(ReceitaControler.class)
 @AutoConfigureMockMvc
@@ -123,6 +126,43 @@ public class ReceitaControllerTest {
         assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
 
 
+    }
+
+    @Test
+    @DisplayName("Deve retornar status 404 e mensagem de erro ao tentar acessar recurso que não existe")
+    void deveRetornarMensagemDeErroAoTentarAcessarTransacaoInexistente() throws Exception {
+        
+        when(this.service.detalhaTransacao(anyLong()))
+            .thenThrow(new EntityNotFoundException());
+        
+        var jsonEsprado = erroJson.write(new ErroDTO(404, "Recurso inexistente")).getJson();
+        
+        var response = mockMvc
+            .perform(get("/receitas/{id}", 1))
+            .andReturn()
+            .getResponse();
+        
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(response.getContentAsString()).isEqualTo(jsonEsprado);
+    }
+
+     @Test
+    @DisplayName("Deve retornar status 200 e receita detalhada")
+    void deveRetornarReceitaDetalhada() throws Exception {
+        Long id = 1L;
+        TransacaoDTO transacao = new TransacaoBuilder().id(id).buildTransacaoDTO();
+        
+        when(this.service.detalhaTransacao(id)).thenReturn(transacao);
+        
+        var jsonEsprado = receitaJson.write(transacao).getJson();
+            
+        var response = mockMvc
+            .perform(get("/receitas/{id}", 1))
+            .andReturn()
+            .getResponse();
+        
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(jsonEsprado);
     }
 
     private List<TransacaoDTO> ciraListaDeReceitas() {
