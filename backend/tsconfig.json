@@ -13,9 +13,10 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
   },
   "include": [
-    "src/**/*,ts"
+    "src/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }
