@@ -9,12 +9,12 @@
       "moduleResolution": "node",
       "outDir": "./build",
       "rootDir": "./src",
-      "baseUrl": "/src",
+      "baseUrl": "./",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
       "esModuleInterop": true
    },
    "include": ["src/**/*"],
-   "exclude": ["node_modules"]
+   "exclude": ["node_modules", "tests", "src/migration"]
 }
