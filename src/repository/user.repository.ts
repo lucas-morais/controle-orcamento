@@ -2,7 +2,7 @@ import { User } from 'src/entity/User';
 import { CreateUserDTO, UpdateUserDTO } from 'src/interface/user.interface';
 import { DataSource, Repository, } from 'typeorm';
 
-export class UserInterface {
+export class UserRepository {
   private _repository: Repository<User>;
 
   constructor(private _datasource: DataSource) {
