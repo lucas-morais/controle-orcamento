@@ -6,6 +6,7 @@ export default [
   { files: ['**/*.{js,mjs,cjs,ts}', "**/*.test.ts"] },
   { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
   {
