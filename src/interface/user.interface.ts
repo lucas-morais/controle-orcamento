@@ -13,3 +13,10 @@ export interface UpdateUserDTO {
   password: string;
   cpf: string;
 }
+
+export interface UserDTO {
+  id: string
+  firstName: string;
+  lastName: string;
+  email: string;
+}
