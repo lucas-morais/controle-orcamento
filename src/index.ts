@@ -5,7 +5,7 @@ import { AppDataSource } from './data-source';
 config();
 const PORT = parseInt(process.env.PORT) | 3000;
 
-AppDataSource.initialize().then(async () => {
+AppDataSource.initialize().then(() => {
   app.listen(PORT, () => {
     console.log(`App rodando na porta ${PORT}`);
   });

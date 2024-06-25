@@ -1,6 +1,6 @@
-import { User } from 'src/entity/User';
-import { CreateUserDTO, UpdateUserDTO } from 'src/interface/user.interface';
 import { DataSource, Repository, } from 'typeorm';
+import { User } from '../entity/User';
+import { CreateUserDTO, UpdateUserDTO } from '../interface/user.interface';
 
 export class UserRepository {
   private _repository: Repository<User>;

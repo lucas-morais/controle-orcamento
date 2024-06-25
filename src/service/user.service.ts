@@ -1,5 +1,5 @@
-import { CreateUserDTO, UpdateUserDTO, UserDTO } from 'src/interface/user.interface';
-import { UserRepository } from 'src/repository/user.repository';
+import { CreateUserDTO, UpdateUserDTO, UserDTO } from '../interface/user.interface';
+import { UserRepository } from '../repository/user.repository';
 
 export class UserService {
   constructor(private _repository: UserRepository) {
